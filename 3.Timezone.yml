@@ -1,0 +1,14 @@
+---
+- name: Change timezone (Asia/Seoul)
+  hosts: "{{ RUNSVR }}"
+
+  tasks:
+    - name: Check timezone
+      register: timezone_result
+      shell: timedatectl | grep "Time zone" | awk '{print $3}'
+
+    - name: Set local timezone to Asia/Seoul
+      timezone:
+        name: Asia/Seoul
+      when:
+        timezone_result.stdout != "Asia/Seoul"
