@@ -1,0 +1,19 @@
+---
+- name: Change SELinux mode with permissive
+  hosts: "{{ RUNSVR }}"
+  
+  tasks:
+    - name: Check SELinux mode
+      register: sestatus_result
+      shell: sestatus | grep SELinux | grep -v grep | awk '{print $3}'
+
+    - name: Change SElinux mode & Reboot
+      shell: sed -i 's/SELINUX=disabled/SELINUX=permissive/g' /etc/selinux/config
+      when:
+        sestatus_result.stdout == "disabled"      
+
+    - name: OS reboot after changed SELinux mode
+      reboot:
+        msg: "Reboot initiated by modify SELinux mode"
+      when:
+        sestatus_result.stdout == "disabled"

@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: "{{ RUNSVR }}"
   tasks:
     - name: Change the hostname
       hostname:
