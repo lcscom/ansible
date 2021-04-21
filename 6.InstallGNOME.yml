@@ -1,0 +1,17 @@
+---
+- hosts: "{{ RUNSVR }}"
+
+  tasks:
+    - name: Install GNOME
+      yum:
+        name: "@^gnome-desktop-environment"
+        state: present
+
+    - name: Change the boot runlevel
+      command: ln -sf /lib/systemd/system/runlevel5.target /etc/systemd/system/default.target
+
+    - name: Server reboot
+      reboot:
+        msg: "The system will reboot after 10 seconds."
+        pre_reboot_delay: 10
+        reboot_timeout: 300
