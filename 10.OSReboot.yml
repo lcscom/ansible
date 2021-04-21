@@ -1,0 +1,9 @@
+---
+- hosts: "{{ RUNSVR }}"
+  gather_facts: no
+  tasks:
+    - name: Server reboot
+      reboot:
+        msg: "The system will reboot after 10 seconds."
+        pre_reboot_delay: 10
+        reboot_timeout: 300

@@ -1,0 +1,26 @@
+---
+- name: Install docker-ce and service start docker
+  hosts: "{{ RUNSVR }}"
+  tasks:
+    - name: Install requiement package for Docker CE installation.
+      shell: yum install -y yum-utils device-mapper-persistent-data lvm2
+
+    - name: Configure the stable repository.
+      shell: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+    - name: docker-ce-edge & test enable.
+      shell: |
+        yum-config-manager --enable docker-ce-edge
+        yum-config-manager --enable docker-ce-test
+    - name: install docker-ce
+      yum:
+        name: docker-ce
+        state: latest
+
+    - name: Start the docker-ce service
+      service:
+        name: docker
+        state: restarted
+
+    - name: Check docker-ce
+      shell: docker run --rm hello-world
